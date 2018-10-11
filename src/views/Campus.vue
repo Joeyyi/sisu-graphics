@@ -1,7 +1,20 @@
 <template>
-  <div class="container">
-    <campus-picker :campuses="campuses" :selectedCampus="selectedCampus" event="onChooseCampus"  @onChooseCampus="setCampus" />
-    <building-picker :buildings="buildings" :selectedBuilding="selectedBuilding" event="onChooseBuilding" @onChooseBuilding="setBuilding" />
+  <div class="container" v-if="fetchOK" >
+    <campus-picker
+    :campuses="campuses"
+    :selectedCampus="selectedCampus"
+    event="onChooseCampus"
+    @onChooseCampus="setCampus"/>
+    <building-picker
+    :buildings="buildings"
+    :selectedBuilding="selectedBuilding"
+    event="onChooseBuilding"
+    @onChooseBuilding="setBuilding" />
+  </div>
+  <div class="loading" v-else>
+    <p>loading...</p>
+    <p>loading...</p>
+    <p>loading...</p>
   </div>
 </template>
 
@@ -20,7 +33,8 @@ export default {
       msg: 'campussssssss',
       mapData: [],
       selectedCampus: 0,
-      selectedBuilding: 0
+      selectedBuilding: 0,
+      fetchOK: false
     }
   },
   computed: {
@@ -41,7 +55,10 @@ export default {
   methods: {
     getMapData () {
       baseModel.get().then((data) => {
-        this.mapData = data;
+        setTimeout(() => {
+          this.mapData = data;
+          this.fetchOK = true;
+        }, 500)
       })
     },
     setCampus (index) {

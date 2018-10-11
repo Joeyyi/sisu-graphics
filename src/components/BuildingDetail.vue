@@ -51,6 +51,12 @@ div * {
   border-radius: .3rem;
   padding: .5rem;
 }
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
 .container-tags {
   display: flex;
   flex-direction: row;
