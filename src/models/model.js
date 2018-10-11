@@ -1,5 +1,5 @@
 import axios from 'axios';
-import mapData from './mapData';
+import * as mapData from './mapData.json';
 
 export default {
   get (url, params) {

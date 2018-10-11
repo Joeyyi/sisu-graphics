@@ -28,6 +28,7 @@ export default {
       return this.mapData.map((campus) => campus.name + '校区');
     },
     buildings () {
+      if (this.mapData.length === 0) return null
       return this.mapData[this.selectedCampus].buildings.map((building) => {
         return {
           name: building.name,
@@ -59,17 +60,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .container {
-  margin-top: 1rem;
+  padding: 1rem 1rem 0;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>

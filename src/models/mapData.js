@@ -1,149 +1,7 @@
-const mapData = [
-  {
-    name: '松江',
-    buildings: [
-      {
-        name: '一教楼',
-        tags: ['新闻学院', '国际教育学院', '国教咖吧'],
-        description: '介绍一下一教一教一教',
-        floors: [
-          {
-            name: '一楼',
-            rooms: [
-              {
-                name: 'blabla',
-                numbers: ['101', '102'],
-                description: '我是10101010',
-                type: 1,
-                data: {
-                  x: 0,
-                  y: 0,
-                  width: 100,
-                  height: 100
-                }
-              },
-              {
-                name: '2222vjdhsg32',
-                numbers: ['103', '104'],
-                description: '我是第二个',
-                type: 2,
-                data: {
-                  x: 100,
-                  y: 0,
-                  width: 100,
-                  height: 100
-                }
-              },
-              {
-                name: '3333333333',
-                numbers: ['105', '106'],
-                description: '我是第3个',
-                type: 3,
-                data: {
-                  x: 200,
-                  y: 0,
-                  width: 100,
-                  height: 100
-                }
-              }
-            ]
-          },
-          {
-            name: '二楼',
-            rooms: [
-              {
-                name: 'blabla',
-                numbers: ['201', '202'],
-                description: '我是10101010',
-                type: 1,
-                data: {
-                  x: 0,
-                  y: 0,
-                  width: 100,
-                  height: 100
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    name: '虹口',
-    buildings: [
-      {
-        name: 'jiu教楼',
-        tags: ['新闻学院', '国际教育学院', '国教咖吧'],
-        description: '介绍一下一教一教一教',
-        floors: [
-          {
-            name: '一楼',
-            rooms: [
-              {
-                name: 'blabla',
-                numbers: ['101', '102'],
-                description: '我是10101010',
-                type: 1,
-                data: {
-                  x: 0,
-                  y: 0,
-                  width: 100,
-                  height: 100
-                }
-              },
-              {
-                name: '2222vjdhsg32',
-                numbers: ['103', '104'],
-                description: '我是第二个',
-                type: 2,
-                data: {
-                  x: 100,
-                  y: 0,
-                  width: 100,
-                  height: 100
-                }
-              },
-              {
-                name: '3333333333',
-                numbers: ['105', '106'],
-                description: '我是第3个',
-                type: 3,
-                data: {
-                  x: 200,
-                  y: 0,
-                  width: 100,
-                  height: 100
-                }
-              }
-            ]
-          },
-          {
-            name: '二楼',
-            rooms: [
-              {
-                name: 'blabla',
-                numbers: ['201', '202'],
-                description: '我是10101010',
-                type: 1,
-                data: {
-                  x: 0,
-                  y: 0,
-                  width: 100,
-                  height: 100
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-]
 
-var roomay = [
+var raw = [
 
-  [1, 1, 1, '127', '128', 200, 0, 100, 100, ''],  //一教楼151 150 152 三个名称问题！
+  [1, 1, 1, '127', '128', 200, 0, 100, 100, ''], // 一教楼151 150 152 三个名称问题！
   [1, 1, 1, '131', '132', 300, 0, 100, 100, ''],
   [1, 1, 2, '楼梯', '0', 400, 0, 100, 100, ''],
   [1, 1, 1, '135', '136', 800, 0, 100, 100, ''],
@@ -189,7 +47,6 @@ var roomay = [
   [1, 1, 1, '137', '0', 800, 200, 100, 100, ''],
   [1, 1, 1, '138', '139', 900, 200, 100, 100, ''],
   [1, 1, 1, '142', '143', 1000, 200, 100, 100, ''],
-
 
   [1, 2, 1, '203', '0', 0, 0, 100, 100, ''],
   [1, 2, 1, '205', '206', 100, 0, 100, 100, ''],
@@ -1045,7 +902,6 @@ var roomay = [
   [7, 2, 2, '楼梯', '0', 0, 900, 100, 100, ''],
   [7, 2, 1, '207', '0', 200, 700, 100, 100, ''],
 
-
   [8, 1, 1, '139', '140', 0, 0, 100, 100, ''],
   [8, 1, 1, '136', '138', 100, 0, 100, 100, ''],
   [8, 1, 1, '132', '134', 200, 0, 100, 100, ''],
@@ -1272,7 +1128,6 @@ var roomay = [
   [9, 7, 1, 'J701', '0', 1300, 200, 100, 100, ''],
   [9, 7, 1, 'J715', 'J713', 500, 300, 300, 500, ''],
 
-
   [10, 1, 2, '楼梯', '0', 0, 0, 100, 100, ''],
   [10, 1, 5, '医务室', '0', 0, 100, 100, 200, ''],
   [10, 1, 1, '训练馆', '0', 200, 0, 600, 300, ''],
@@ -1362,11 +1217,29 @@ var roomay = [
 
 ];
 
+var conversion = [
+  ['一教楼', '1'],
+  ['二教楼', '2'],
+  ['三教楼', '3'],
+  ['四教楼', '4'],
+  ['五教楼', '5'],
+  ['六教楼', '6'],
+  ['七教楼', '7'],
+  ['八教楼', '8'],
+  ['图文信息中心', '9'],
+  ['师生活动中心', '10'],
+  ['教育会堂', '11']
+];
 
-var a = roomay;
+const map = {};
+conversion.forEach((arr) => {
+  map[arr[1]] = arr[0];
+})
+
+var a = raw;
 var ori = {
   name: '松江',
-  address: 'ndakajd',
+  address: '松江区文翔路1550号',
   buildings: []
 };
 let res = []
@@ -1374,9 +1247,9 @@ let res = []
 a.forEach((room, index, arr) => {
   if (!res[room[0] - 1]) {
     res[room[0] - 1] = {
-      name: room[0] + '教楼',
-      tags: [],
-      description: '',
+      name: map[room[0]],
+      tags: ['自习室', '咖吧', '小花园'],
+      description: `这里是是是是是是是是是是是是是是是是${(map[room[0]])}字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数字数`,
       floors: []
     };
   } else {
@@ -1388,7 +1261,7 @@ a.forEach((room, index, arr) => {
       };
     } else {
       let b = f[room[1] - 1].blocks;
-      let number = /^[0-9]*$/;
+      let number = /[0-9]{3}$/;
       let numbers = [];
       if (number.test(room[3]) && room[3] !== 0) numbers.push(room[3]);
       if (number.test(room[4]) && room[3] !== 0) numbers.push(room[4]);
@@ -1409,12 +1282,12 @@ a.forEach((room, index, arr) => {
   }
 })
 
-ori.buildings.push(res);
-var fs = require('fs');
-
-// fs.writeFile(__dirname + '/test.json', JSON.stringify(ori), (e) => {
-//   console.log(e)
-// })
-// console.log(res);
-
-export default mapData;
+ori.buildings = res;
+let result = [];
+result.push(ori);
+result.push(ori);
+const fs = require('fs');
+const path = require('path');
+fs.writeFile(path.join(__dirname, 'mapData.json'), JSON.stringify(result), (e) => {
+  console.log(e)
+})

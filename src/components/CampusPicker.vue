@@ -24,8 +24,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$primary-color: navy;
-$secondary-color: #fff;
+@import '../assets/styles/_config';
+
 .container {
   display: flex;
   flex-direction: row;
@@ -33,7 +33,7 @@ $secondary-color: #fff;
   align-items: center;
 }
 ul {
-  border: 1px solid $primary-color;
+  border: 1px solid $color-primary;
   overflow: hidden;
   border-radius: 1rem;
   width: 50%;
@@ -41,12 +41,12 @@ ul {
 }
 li {
   flex:1;
-  color: $primary-color;
-  background-color: $secondary-color;
+  color: $color-primary;
+  background-color: $color-secondary;
   padding: 0 10px;
   &.selected {
-    background-color: $primary-color;
-    color: $secondary-color;
+    background-color: $color-primary;
+    color: $color-secondary;
   }
 }
 
