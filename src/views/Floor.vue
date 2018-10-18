@@ -1,36 +1,95 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-
+  <div class="container">
+    <p class="float nav"
+      v-show="showCtrls">
+      {{ campus }} {{ building }} {{ floor }} {{ room }}
+    </p>
+    <p class="float ctrls"
+      v-show="showCtrls"
+      v-if="orientation >= 0">
+      {{ orientation }}
+    </p>
+    <floor-map class="map"
+      v-if="buildingData.blocks"
+      :data="buildingData"
+      :transform="orientation"
+    />
   </div>
 </template>
 
 <script>
+import baseModel from '../models/model.js';
+import Map from '../components/Map'
+
 export default {
-  name: 'HelloWorld',
+  name: 'Floor',
+  components: {
+    'floor-map': Map
+  },
   data () {
     return {
-      msg: 'florrrrrrr'
+      campus: this.$route.query.campus || 0,
+      building: this.$route.query.building || 0,
+      floor: this.$route.query.floor || 0,
+      room: this.$route.query.room || -1,
+      buildingData: {},
+      orientation: 0,
+      showCtrls: true
+    };
+  },
+  methods: {
+    getMapData () {
+      baseModel
+        .get(null, {
+          campus: this.campus,
+          building: this.building,
+          floor: this.floor
+        })
+        .then(data => {
+          console.log(data);
+          this.buildingData = data;
+        });
+    },
+    getOrientation () {
+      if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', (event) => {
+          if (Math.abs(event.alpha - this.orientation) < 2) return
+          this.orientation = Math.floor(event.alpha)
+        })
+      }
     }
+  },
+  mounted () {
+    this.getMapData()
+    this.getOrientation()
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
+html, body {
+  height: 100%;
+  width: 100%;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.float {
+  z-index: 1;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+.container {
+  height: 100%;
 }
-a {
-  color: #42b983;
+.nav {
+  position: absolute;
+}
+.ctrls {
+  position: absolute;
+}
+.map {
+  position: absolute;
+  box-sizing: border-box;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>

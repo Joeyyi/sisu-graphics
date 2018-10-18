@@ -12,14 +12,14 @@
         </ul>
       </div>
     </div>
-    <button class="btn">室内地图</button>
+    <button class="btn" @click="direct">室内地图</button>
   </div>
 </template>
 
 <script>
 export default {
   name: 'BuildingDetail',
-  props: ['name', 'tags', 'description'],
+  props: ['name', 'tags', 'description', 'direct'],
   methods: {
     onPress (data) {
       this.$emit(this.event, data);

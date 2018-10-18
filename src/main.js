@@ -5,6 +5,10 @@ import App from './App'
 import router from './router'
 import VueTouch from 'vue-touch'
 
+import VConsole from 'vconsole'
+let vConsole = new VConsole()
+Vue.use(vConsole)
+
 Vue.config.productionTip = false
 
 Vue.use(VueTouch, {name: 'v-touch'})

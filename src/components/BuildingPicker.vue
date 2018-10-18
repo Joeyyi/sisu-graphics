@@ -9,46 +9,16 @@
         <div class="text">{{ building.name }}</div>
       </li>
     </ul>
-    <v-touch @panmove="onSlide" @panend="onSlideEnd">
-      <div ref="card">
-        <building-detail
-          :name="buildings[selectedBuilding].name"
-          :description="buildings[selectedBuilding].description"
-          :tags="buildings[selectedBuilding].tags"
-        />
-      </div>
-    </v-touch>
   </div>
 </template>
 
 <script>
-import BuildingDetail from './BuildingDetail'
 export default {
   name: 'BuildingPicker',
   props: ['buildings', 'selectedBuilding', 'event'],
-  components: {
-    'building-detail': BuildingDetail
-  },
   methods: {
     onPress (data) {
       this.$emit(this.event, data);
-    },
-    onSlide (e) {
-      this.$refs.card.style['transform'] = `translateX(${e.deltaX}px)`
-      this.$refs.card.style['transition'] = 'all 0'
-    },
-    onSlideEnd (e) {
-      if (this.$refs.card.style['transform'].replace(/[^0-9]/ig, '') > 100) {
-        // 临界位移？
-        if (e.direction === 2 && this.selectedBuilding !== this.buildings.length - 1) {
-          this.selectedBuilding++;
-        }
-        if (e.direction === 4 && this.selectedBuilding !== 0) {
-          this.selectedBuilding--;
-        }
-      }
-      this.$refs.card.style['transform'] = 'translateX(0)'
-      this.$refs.card.style['transition'] = 'all 1s'
     }
   }
 }

@@ -1,15 +1,27 @@
 <template>
   <div class="container" v-if="fetchOK" >
     <campus-picker
-    :campuses="campuses"
-    :selectedCampus="selectedCampus"
-    event="onChooseCampus"
-    @onChooseCampus="setCampus"/>
+      :campuses="campuses"
+      :selectedCampus="selectedCampus"
+      event="onChooseCampus"
+      @onChooseCampus="setCampus"
+    />
     <building-picker
-    :buildings="buildings"
-    :selectedBuilding="selectedBuilding"
-    event="onChooseBuilding"
-    @onChooseBuilding="setBuilding" />
+      :buildings="buildings"
+      :selectedBuilding="selectedBuilding"
+      event="onChooseBuilding"
+      @onChooseBuilding="setBuilding"
+    />
+    <v-touch @panmove="onSlide" @panend="onSlideEnd">
+      <div ref="card">
+        <building-detail
+          :name="buildings[selectedBuilding].name"
+          :description="buildings[selectedBuilding].description"
+          :tags="buildings[selectedBuilding].tags"
+          :direct="goToFloor"
+        />
+      </div>
+    </v-touch>
   </div>
   <div class="loading" v-else>
     <p>loading...</p>
@@ -22,11 +34,14 @@
 import baseModel from '../models/model.js';
 import campusPicker from '../components/CampusPicker'
 import buildingPicker from '../components/BuildingPicker'
+import buildingDetail from '../components/BuildingDetail'
+
 export default {
   name: 'Campus',
   components: {
     'campus-picker': campusPicker,
-    'building-picker': buildingPicker
+    'building-picker': buildingPicker,
+    'building-detail': buildingDetail
   },
   data () {
     return {
@@ -66,6 +81,28 @@ export default {
     },
     setBuilding (index) {
       this.selectedBuilding = index;
+    },
+    onSlide (e) {
+      this.$refs.card.style['transform'] = `translateX(${e.deltaX}px)`
+      this.$refs.card.style['transition'] = 'all 0'
+    },
+    onSlideEnd (e) {
+      if (this.$refs.card.style['transform'].replace(/[^0-9]/ig, '') > 100) {
+        // 临界位移？
+        if (e.direction === 2 && this.selectedBuilding !== this.buildings.length - 1) {
+          this.selectedBuilding++;
+        }
+        if (e.direction === 4 && this.selectedBuilding !== 0) {
+          this.selectedBuilding--;
+        }
+      }
+      this.$refs.card.style['transform'] = 'translateX(0)'
+      this.$refs.card.style['transition'] = 'all 1s'
+    },
+    goToFloor () {
+      this.$router.push({
+        path: `/floor?campus=${this.selectedCampus}&building=${this.selectedBuilding}&floor=0`
+      })
     }
   },
   mounted () {
