@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     getMapData () {
-      baseModel.get().then((data) => {
+      baseModel.get('/campus').then((data) => {
         setTimeout(() => {
           this.mapData = data;
           this.fetchOK = true;

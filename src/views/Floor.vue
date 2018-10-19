@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <transition name="fade">
+    <transition name="fade" v-if="fetchStatus === 1">
       <div class="float">
         <p class="nav"
           v-show="showCtrls">
@@ -15,11 +15,13 @@
       </div>
     </transition>
     <floor-map class="map"
-      v-if="buildingData.blocks"
+      v-if="fetchStatus === 1"
       :data="buildingData"
       :rotate="rotation"
       @svg-tapped="showCtrls = !showCtrls"
     />
+    <p v-if="fetchStatus === 0">loading...</p>
+    <p v-if="fetchStatus === (3 || 4)">error...</p>
   </div>
 </template>
 
@@ -42,7 +44,8 @@ export default {
       enableRotation: true,
       shouldUpdateRotation: true,
       rotation: 0,
-      showCtrls: true
+      showCtrls: true,
+      fetchStatus: 0
     };
   },
   watch: {
@@ -55,22 +58,24 @@ export default {
   },
   methods: {
     getMapData () {
-      baseModel
-        .get(null, {
-          campus: this.campus,
-          building: this.building,
-          floor: this.floor
-        })
-        .then(data => {
-          console.log('floor data:', data)
-          this.buildingData = data
-        });
+      baseModel.get('/view', {
+        campus: this.campus,
+        building: this.building,
+        floor: this.floor
+      }).then((res) => {
+        if (res.data.responseStatus === 2) {
+          this.$router.push(res.data.redirect)
+        } else {
+          this.fetchStatus = res.data.responseStatus
+          this.buildingData = res.data.data
+        }
+      })
     },
     getOrientation () {
       if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', this.updateRotation)
       } else {
-        alert('不支持罗盘')
+        alert('您的设备不支持罗盘')
       }
     },
     updateRotation (event) {
