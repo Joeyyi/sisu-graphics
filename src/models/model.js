@@ -1,8 +1,12 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const DOMAIN = 'https://ancient-tor-41221.herokuapp.com';
 const ENV = process.env.NODE_ENV;
+const DOMAIN_MAP = {
+  production: 'https://ancient-tor-41221.herokuapp.com',
+  development: 'http://localhost:3000'
+}
+const DOMAIN = DOMAIN_MAP[ENV];
 
 export default {
   get (api, params) {

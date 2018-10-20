@@ -46,7 +46,7 @@ div * {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 30rem;
+  height: 15rem;
   border: .04rem solid darkgrey;
   border-radius: .3rem;
   padding: .5rem;

@@ -1,32 +1,35 @@
 <template>
-  <div class="container" v-if="fetchOK" >
-    <campus-picker
-      :campuses="campuses"
-      :selectedCampus="selectedCampus"
-      event="onChooseCampus"
-      @onChooseCampus="setCampus"
-    />
-    <building-picker
-      :buildings="buildings"
-      :selectedBuilding="selectedBuilding"
-      event="onChooseBuilding"
-      @onChooseBuilding="setBuilding"
-    />
-    <v-touch @panmove="onSlide" @panend="onSlideEnd">
-      <div ref="card">
-        <building-detail
-          :name="buildings[selectedBuilding].name"
-          :description="buildings[selectedBuilding].description"
-          :tags="buildings[selectedBuilding].tags"
-          :direct="goToFloor"
-        />
-      </div>
-    </v-touch>
-  </div>
-  <div class="loading" v-else>
-    <p>loading...</p>
-    <p>loading...</p>
-    <p>loading...</p>
+  <div>
+    <div class="container" v-if="fetchStatus === 1" >
+      <campus-picker
+        :campuses="campuses"
+        :selectedCampus="selectedCampus"
+        event="onChooseCampus"
+        @onChooseCampus="setCampus"
+      />
+      <building-picker
+        :buildings="buildings"
+        :selectedBuilding="selectedBuilding"
+        event="onChooseBuilding"
+        @onChooseBuilding="setBuilding"
+      />
+      <v-touch @panmove="onSlide" @panend="onSlideEnd">
+        <div ref="card">
+          <building-detail
+            :name="buildings[selectedBuilding].name"
+            :description="buildings[selectedBuilding].description"
+            :tags="buildings[selectedBuilding].tags"
+            :direct="goToFloor"
+          />
+        </div>
+      </v-touch>
+    </div>
+    <div class="loading" v-if="fetchStatus === 0">
+      <p>loading...</p>
+    </div>
+    <div class="error" v-if="fetchStatus === 4">
+      <p>loading...</p>
+    </div>
   </div>
 </template>
 
@@ -49,31 +52,38 @@ export default {
       mapData: [],
       selectedCampus: 0,
       selectedBuilding: 0,
-      fetchOK: false
+      fetchStatus: 0
     }
   },
   computed: {
     campuses () {
-      return this.mapData.map((campus) => campus.name + '校区');
+      if (this.mapData.length === 0) return null
+      return this.mapData.map((campus) => {
+        return {
+          name: campus.name + '校区',
+          address: campus.address,
+          description: campus.description
+        }
+      })
     },
     buildings () {
       if (this.mapData.length === 0) return null
-      return this.mapData[this.selectedCampus].buildings.map((building) => {
-        return {
-          name: building.name,
-          tags: building.tags,
-          description: building.description
-        }
-      })
+      return this.mapData[this.selectedCampus].buildings
+      // return this.mapData[this.selectedCampus].buildings.map((building) => {
+      //   return {
+      //     name: building.name,
+      //     tags: building.tags,
+      //     description: building.description
+      //   }
+      // })
     }
   },
   methods: {
     getMapData () {
-      baseModel.get('/campus').then((data) => {
-        setTimeout(() => {
-          this.mapData = data;
-          this.fetchOK = true;
-        }, 500)
+      baseModel.get('/campus').then((res) => {
+        this.fetchStatus = res.data.responseStatus;
+        this.mapData = res.data.data;
+        console.log('this.mapdata', this.mapData, this.fetchStatus)
       })
     },
     setCampus (index) {

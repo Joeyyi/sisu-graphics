@@ -1,8 +1,10 @@
 <template>
   <div>
     <ul class="container">
-      <li v-for="(name, index) in campuses" :key="index" :class="{ selected: selectedCampus == index }" @click="onPress(index)">{{ name }}</li>
+      <li v-for="(campus, index) in campuses" :key="index" :class="{ selected: selectedCampus == index }" @click="onPress(index)">{{ campus.name }}</li>
     </ul>
+    <p class="address">地址：{{ campuses[selectedCampus].address }}</p>
+    <p class="description">{{ campuses[selectedCampus].description }}</p>
   </div>
 </template>
 
