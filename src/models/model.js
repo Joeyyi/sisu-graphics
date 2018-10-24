@@ -1,18 +1,14 @@
-import axios from 'axios';
-import qs from 'qs';
+import axios from 'axios'
+import qs from 'qs'
 
-const ENV = process.env.NODE_ENV;
-const DOMAIN_MAP = {
-  production: 'https://ancient-tor-41221.herokuapp.com',
-  development: 'http://localhost:3000'
-}
-const DOMAIN = DOMAIN_MAP[ENV];
+const ENV = process.env.NODE_ENV
+const DOMAIN = 'https://ancient-tor-41221.herokuapp.com'
 
 export default {
   get (api, params) {
     const url = `${DOMAIN}${api}${params ? '?' + qs.stringify(params) : ''}`
     if (ENV === 'development') {
-      console.log(`%cfetch url: ${url}`, 'color: blue');
+      console.log(`%cfetch url: ${url}`, 'color: blue')
     }
     return axios.get(url)
       .then((res) => {

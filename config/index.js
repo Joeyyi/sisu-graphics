@@ -4,13 +4,34 @@
 
 const path = require('path')
 
+// 获取本地局域网中的本机ip地址
+// https://nodejs.org/api/os.html#os_os_networkinterfaces
+
+const os = require('os')
+const qrcode = require('qrcode-terminal');
+let ip
+let interfaces = os.networkInterfaces()
+for (let i in interfaces) {
+  interfaces[i].forEach((address) => {
+    if (address.family === 'IPv4' && address.address !== '127.0.0.1' && !address.internal) ip = address.address
+  })
+}
+console.log('API requests forwarded to: ' + 'http://' + ip + ':3000')
+console.log('Application serving at: ' + 'http://' + ip + ':8080')
+qrcode.generate('http://' + ip + ':8080', {small: true})
+
 module.exports = {
   dev: {
 
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      'https://ancient-tor-41221.herokuapp.com/': {
+        target: 'http://localhost:3000',
+        pathRewrite: {'^/api' : ''}
+      }
+    },
 
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST
