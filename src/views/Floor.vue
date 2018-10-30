@@ -1,17 +1,24 @@
 <template>
   <div class="container">
-    <transition name="fade" v-if="fetchStatus === 1">
-      <div class="float">
-        <p class="nav"
-          v-show="showCtrls">
-          {{ campus }} {{ building }} {{ floor }} {{ room }}
-        </p>
+    <transition name="fade">
+      <div class="float" v-show="showCtrls">
         <div class="orientation"
-          v-show="showCtrls"
           @click="switchRotation">
           <img src="../assets/images/compass.png" :style="{transform: `rotate(${rotation - 45}deg)`}">
           <p>跟随方向:{{ enableRotation ? 'ON' : 'OFF' }}</p>
         </div>
+        <map-nav
+          class="map-nav"
+          :mapNav="nav"
+          :campus="campus"
+          :building="building"
+          @change-nav="changeNav"
+          :mode="showCtrls" />
+        <floor-nav
+          class="floor-nav"
+          :selected="floor"
+          :total="nav[campus].buildings[building].num"
+          @changeFloor="changeFloor" />
       </div>
     </transition>
     <floor-map class="map"
@@ -20,19 +27,26 @@
       :rotate="rotation"
       @svg-tapped="showCtrls = !showCtrls"
     />
-    <p v-if="fetchStatus === 0">loading...</p>
-    <p v-if="fetchStatus === (3 || 4)">error...</p>
+    <div class="msg-container">
+      <p class="message" v-if="fetchStatus === 0">Loading...</p>
+      <p class="message" v-if="fetchStatus === 3 || fetchStatus === 4">加载错误，请重新选择</p>
+    </div>
   </div>
 </template>
 
 <script>
+import {mapNav} from '../global.js';
 import baseModel from '../models/model.js';
 import Map from '../components/Map'
+import MapNav from '../components/MapNav'
+import FloorNav from '../components/FloorNav'
 
 export default {
   name: 'Floor',
   components: {
-    'floor-map': Map
+    'floor-map': Map,
+    'floor-nav': FloorNav,
+    'map-nav': MapNav
   },
   data () {
     return {
@@ -45,7 +59,8 @@ export default {
       shouldUpdateRotation: true,
       rotation: 0,
       showCtrls: true,
-      fetchStatus: 0
+      fetchStatus: 0,
+      nav: mapNav
     };
   },
   watch: {
@@ -65,9 +80,12 @@ export default {
       }).then((res) => {
         if (res.data.responseStatus === 2) {
           this.$router.push(res.data.redirect)
-        } else {
+        } else if (res.data.responseStatus === 1) {
           this.fetchStatus = res.data.responseStatus
           this.buildingData = res.data.data
+        } else {
+          this.fetchStatus = res.data.responseStatus
+          console.log('error: responseStatus', this.fetchStatus)
         }
       })
     },
@@ -123,6 +141,18 @@ export default {
       } else if (val.query.index !== this.room) {
         console.log('index changed', val.query.index)
       }
+    },
+    changeFloor (i) {
+      this.floor = i
+      this.fetchStatus = 0
+      this.getMapData()
+    },
+    changeNav (i) {
+      this.campus = i[0]
+      this.building = i[1]
+      this.floor = 0
+      this.fetchStatus = 0
+      this.getMapData()
     }
   },
   mounted () {
@@ -152,15 +182,15 @@ html, body {
 .map {
   position: absolute;
   box-sizing: border-box;
-  z-index: 0;
+  z-index: -1;
   width: 100%;
   height: 100%;
 }
 
 .orientation {
   position: absolute;
-  bottom: 2rem;
-  left: 2rem;
+  bottom: 1rem;
+  left: 1rem;
   background-color: #fff;
   box-shadow: 0 0 0.05em #000;
   padding: .4rem;
@@ -172,6 +202,18 @@ html, body {
   justify-content: center;
   align-items: center;
 }
+.map-nav {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  width: 6rem;
+}
+.floor-nav {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  width: 2rem;
+}
 .orientation img {
   width: 2rem;
   height: 2rem;
@@ -179,6 +221,19 @@ html, body {
 p {
   margin: 0;
   z-index: 2;
+}
+.msg-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: -2;
+}
+.message {
+  color: grey;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity .3s;

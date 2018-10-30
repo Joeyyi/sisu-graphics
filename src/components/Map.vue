@@ -1,5 +1,6 @@
 <template>
-  <v-touch @panmove="onMove" @tap="onTap" class="container">
+  <v-touch @panmove="onMove" @tap="onTap" @rotate="onRotate" @pinch="onPinch" class="container">
+    <p>{{angle}}/{{scale}}/{{translateX}}/{{translateY}}</p>
     <svg></svg>
   </v-touch>
   <!-- <div class="container">
@@ -21,7 +22,10 @@ export default {
         4: '#ffc09f',
         5: '#e2dbbe'
       },
-      trans: 0
+      angle: 0,
+      scale: 2,
+      translateX: 0,
+      translateY: 0
     }
   },
   watch: {
@@ -56,19 +60,37 @@ export default {
     },
     onMove (e) {
       console.log(e)
-      d3.select('svg').transition()
-        .attr('transform', `translate(${e.deltaX},${e.deltaY})`)
+      this.translateX = Math.floor(e.deltaX)
+      this.translateY = Math.floor(e.deltaY)
+      this.update()
+      // d3.select('svg').transition()
+      //   .attr('transform', `translate(${e.deltaX},${e.deltaY})`)
     },
-    onRotate (d) {
-      d3.select('svg').transition()
-        .style('transform', `rotate(${this.transform}deg)`)
+    onRotate (e) {
+      console.log(e)
+      this.angle = Math.floor(e.rotation)
+      this.update()
+      // d3.select('svg').transition()
+      //   .style('transform', `rotate(${e.angle}deg)`)
+    },
+    onPinch (e) {
+      console.log(e)
+      this.scale = Math.floor(e.scale)
+      this.update()
+      // d3.select('svg').transition()
+      //   .style('transform', `scale(${e.scale})`)
     },
     onTap (e) {
       this.$emit('svg-tapped')
     },
+    update () {
+      d3.select('svg').transition()
+        .style('transform', `scale(${this.scale}) rotate(${this.angle})`)
+    },
     renderMap () {
       const mapSize = this.calcSize()
       const dataset = this.data.blocks
+      d3.select('svg').selectAll('*').remove()
       const map = d3.select('svg')
         .attr('class', 'map')
         .attr('preserveAspectRatio', 'xMidYMid meet')
@@ -181,6 +203,10 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+svg {
+  touch-action: auto;
 }
 
 </style>
