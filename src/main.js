@@ -6,8 +6,10 @@ import router from './router'
 import VueTouch from 'vue-touch'
 
 import VConsole from 'vconsole'
-let vConsole = new VConsole()
-Vue.use(vConsole)
+if (process.env.NODE_ENV === 'development') {
+  let vConsole = new VConsole()
+  Vue.use(vConsole)
+}
 
 Vue.config.productionTip = false
 

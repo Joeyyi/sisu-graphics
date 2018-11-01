@@ -33,4 +33,20 @@ let mapNav = [
     ]
   }
 ]
-export {version, mapNav}
+
+let localMapData
+
+if (window.localStorage) {
+  localMapData = window.localStorage
+}
+
+const setData = (d) => {
+  localMapData = d
+  console.log('local: ', localMapData)
+}
+
+const getData = (d) => {
+  console.log('local: ', localMapData)
+  return localMapData
+}
+export {version, mapNav, setData, getData, localMapData}

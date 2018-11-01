@@ -18,7 +18,7 @@ export default {
   props: ['buildings', 'selectedBuilding', 'event'],
   methods: {
     onPress (data) {
-      this.$emit(this.event, data);
+      this.$emit(this.event, data)
     }
   }
 }
@@ -39,16 +39,18 @@ ul {
   padding: 1rem 0;
   display: flex;
   flex-direction: row;
-  overflow: scroll;
+  align-items: center;
+  overflow: auto;
 }
 .item {
+  @extend .map-nav;
   flex: none;
   margin-left: .5rem;
-  width: 5rem;
-  height: 5rem;
-  border: .04rem solid $color-primary;
+  width: 4rem;
+  height: 4rem;
+  // border: .04rem solid $color-primary;
   border-radius: .3rem;
-  padding: 0;
+  padding: .5rem;;
   background-color: $color-secondary;
   &:nth-child(1) {
     margin-left: 0;
@@ -60,10 +62,13 @@ ul {
   text-align: center;
 }
 .text {
-  color: $color-primary;
+  color: #333;
 }
 .selected {
-  background-color:  $color-primary-light;
+  width: 5rem;
+  height: 5rem;
+  background-color:  $color-primary;
+  padding: .5rem;
   div {
     color: $color-secondary;
   }

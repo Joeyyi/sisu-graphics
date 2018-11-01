@@ -2,7 +2,6 @@
   <div class="container">
     <div class="content">
       <h1 class="title">{{ name }}</h1>
-      <p class="description">{{ description }}</p>
       <div class="container-tags">
         <p class="tags-header">Tags:</p>
         <ul class="tags">
@@ -11,8 +10,9 @@
           </li>
         </ul>
       </div>
+      <p class="description">{{ description }}</p>
     </div>
-    <button class="btn" @click="direct">室内地图</button>
+    <div class="btn" @click="direct">楼层地图</div>
   </div>
 </template>
 
@@ -47,7 +47,7 @@ div * {
   justify-content: space-between;
   align-items: center;
   height: 15rem;
-  border: .04rem solid darkgrey;
+  // border: .04rem solid darkgrey;
   border-radius: .3rem;
   padding: .5rem;
 }
@@ -71,16 +71,24 @@ div * {
 .tags {
   li {
     display: inline-block;
-    background-color: $color-primary;
+    background-color: #ccc;
     margin-right: .3rem;
     border-radius: .3rem;
-    padding: .1rem .3rem;
+    padding: .2rem .3rem;
     overflow: hidden;
   }
 }
 .tag {
-  color:$color-secondary;
+  color:#333;
   margin: 0;
   font-size: .8rem;
+}
+.btn {
+  // @extend .map-nav;
+  padding: .5rem;
+  background-color: $color-primary;
+  color: #fff;
+  border-radius: .4rem;
+  -webkit-appearance: none;
 }
 </style>

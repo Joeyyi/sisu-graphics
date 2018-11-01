@@ -3,8 +3,10 @@
     <ul class="container">
       <li v-for="(campus, index) in campuses" :key="index" :class="{ selected: selectedCampus == index }" @click="onPress(index)">{{ campus.name }}</li>
     </ul>
-    <p class="address">地址：{{ campuses[selectedCampus].address }}</p>
-    <p class="description">{{ campuses[selectedCampus].description }}</p>
+    <div class="description">
+      <p class="address">地址：{{ campuses[selectedCampus].address }}</p>
+      <p>{{ campuses[selectedCampus].description }}</p>
+    </div>
   </div>
 </template>
 
@@ -51,5 +53,13 @@ li {
     color: $color-secondary;
   }
 }
-
+.address {
+  text-align: center;
+}
+.description {
+  margin-top: .5rem;
+  p {
+    margin: .2rem 0;
+  }
+}
 </style>

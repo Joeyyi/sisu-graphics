@@ -1,8 +1,9 @@
 <template>
-  <v-touch @panmove="onMove" @tap="onTap" @rotate="onRotate" @pinch="onPinch" class="container">
-    <p>{{angle}}/{{scale}}/{{translateX}}/{{translateY}}</p>
-    <svg></svg>
-  </v-touch>
+  <div class="wrapper" :style="{transform: `translate(${translateX}px,${translateY}px) rotate(${angle}deg) scale(${scale})`}">
+    <v-touch @panmove="onMove" @tap="onTap" @rotate="onRotate" @pinch="onPinch" class="container">
+        <svg></svg>
+    </v-touch>
+  </div>
   <!-- <div class="container">
     <v-touch @panmove="onMove" @click="onTap" tag="svg" :style="{transform: trans}"></v-touch>
   </div> -->
@@ -23,14 +24,14 @@ export default {
         5: '#e2dbbe'
       },
       angle: 0,
-      scale: 2,
+      scale: 1,
       translateX: 0,
       translateY: 0
     }
   },
   watch: {
     rotate: function (newVal, oldVal) {
-      if (newVal === 0) console.log(oldVal, newVal)
+      this.angle = 0
       d3.select('svg').transition()
         .style('transform', `rotate(${newVal}deg)`)
       d3.selectAll('text').transition()
@@ -59,24 +60,24 @@ export default {
       return [x, y]
     },
     onMove (e) {
-      console.log(e)
+      // console.log(e)
       this.translateX = Math.floor(e.deltaX)
       this.translateY = Math.floor(e.deltaY)
-      this.update()
+      // this.update()
       // d3.select('svg').transition()
       //   .attr('transform', `translate(${e.deltaX},${e.deltaY})`)
     },
     onRotate (e) {
-      console.log(e)
+      // console.log(e)
       this.angle = Math.floor(e.rotation)
-      this.update()
+      // this.update()
       // d3.select('svg').transition()
       //   .style('transform', `rotate(${e.angle}deg)`)
     },
     onPinch (e) {
-      console.log(e)
-      this.scale = Math.floor(e.scale)
-      this.update()
+      // console.log(e)
+      this.scale = e.scale
+      // this.update()
       // d3.select('svg').transition()
       //   .style('transform', `scale(${e.scale})`)
     },
@@ -203,6 +204,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
 
 svg {

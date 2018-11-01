@@ -55,7 +55,7 @@ export default {
       floor: this.$route.query.floor || 0,
       room: this.$route.query.room || -1,
       buildingData: {},
-      enableRotation: true,
+      enableRotation: false,
       shouldUpdateRotation: true,
       rotation: 0,
       showCtrls: true,
@@ -97,6 +97,7 @@ export default {
       }
     },
     updateRotation (event) {
+      if (!this.enableRotation) return
       let alpha = 0
       if (event.webkitCompassHeading) {
         alpha = event.webkitCompassHeading
@@ -123,23 +124,23 @@ export default {
       }
     },
     watchMotion (event) {
-      this.shouldUpdateRotation = !event.acceleration.x > 0.01
+      this.shouldUpdateRotation = !(event.acceleration.x > 0.01)
     },
     onRoute (val) {
       if (val.query.campus !== this.campus) {
-        console.log('campus changed')
+        // console.log('campus changed')
         this.campus = val.query.campus
         this.getMapData()
       } else if (val.query.building !== this.building) {
-        console.log('building changed')
+        // console.log('building changed')
         this.building = val.query.building
         this.getMapData()
       } else if (val.query.floor !== this.floor) {
-        console.log('floor changed')
+        // console.log('floor changed')
         this.floor = val.query.floor
         this.getMapData()
       } else if (val.query.index !== this.room) {
-        console.log('index changed', val.query.index)
+        // console.log('index changed', val.query.index)
       }
     },
     changeFloor (i) {
@@ -159,6 +160,10 @@ export default {
     this.getMapData()
     this.getOrientation()
     this.getMotion()
+  },
+  beforeDestroy () {
+    window.removeEventListener('deviceorientation', this.updateRotation)
+    window.removeEventListener('devicemotion', this.watchMotion)
   }
 };
 </script>

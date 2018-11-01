@@ -13,22 +13,20 @@
         event="onChooseBuilding"
         @onChooseBuilding="setBuilding"
       />
-      <v-touch @panmove="onSlide" @panend="onSlideEnd">
-        <div ref="card">
-          <building-detail
-            :name="buildings[selectedBuilding].name"
-            :description="buildings[selectedBuilding].description"
-            :tags="buildings[selectedBuilding].tags"
-            :direct="goToFloor"
-          />
-        </div>
-      </v-touch>
+      <div>
+        <building-detail
+          :name="buildings[selectedBuilding].name"
+          :description="buildings[selectedBuilding].description"
+          :tags="buildings[selectedBuilding].tags"
+          :direct="goToFloor"
+        />
+      </div>
     </div>
     <div class="loading" v-if="fetchStatus === 0">
-      <p>loading...</p>
+      <p>Loading...</p>
     </div>
     <div class="error" v-if="fetchStatus === 4">
-      <p>loading...</p>
+      <p>加载错误，请重试</p>
     </div>
   </div>
 </template>
@@ -125,6 +123,12 @@ export default {
 <style scoped>
 .container {
   padding: 1rem 1rem 0;
+}
+
+.loading, .error {
+  color: #666;
+  text-align: center;
+  margin-top: 20rem;
 }
 
 </style>
